@@ -55,15 +55,17 @@
 
 		function actuali(){
 			$('#load').load(document.URL +  ' #load');
+
 			d3.csv("https://raw.githubusercontent.com/yureimacv/yureimacv-DS/master/ocupacion_genero_2.csv")
 					.then(function(data){
 						//console.log("TamJson:"+data.length ); 
+
 						dibuje_stacked(data, d3.select("#viz"));
+						actualiLin();
 					});
 		}
 
-		function actualiLin(ocupacion){
-			console.log(ocupacion);
+		function actualiLin(){
 			$('#lineas').load(document.URL +  ' #lineas');
 		d3.csv("https://raw.githubusercontent.com/yureimacv/yureimacv-DS/gh-pages/Educacion_genero.csv")
 					.then(function(data){
