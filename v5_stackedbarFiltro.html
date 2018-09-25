@@ -72,6 +72,7 @@ Consulte qué nivel educativo tienen las personas que ocupan los diferentes carg
 
 		function actuali(){
 			$('#load').load(document.URL +  ' #load');
+
 			d3.csv("https://raw.githubusercontent.com/yureimacv/yureimacv-DS/master/ocupacion_genero_2.csv")
 					.then(function(data){
 						//console.log("TamJson:"+data.length ); 
@@ -231,6 +232,7 @@ Consulte qué nivel educativo tienen las personas que ocupan los diferentes carg
     				.attr("font-size", "16px")
     				.attr("font-weight", "bold");		
 
+    		actualiLin();
 }
 
 
