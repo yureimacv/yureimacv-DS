@@ -9,8 +9,8 @@
 			<option value="PAIS">PAIS</option>
 			<option value="BOGOTA">BOGOTA</option>
 		</select>
-	<div id="load">
 		
+	<div id="load">
 		<svg height=400 width=1060 id="viz"></svg>
 	</div>
 	<script src="https://d3js.org/d3.v5.min.js"></script>
@@ -24,7 +24,8 @@
 					});
 
 		function actuali(){
-			$("#load").load(location.href+" #load>*","");
+			//$("#load").load(location.href+" #load>*","");
+			$('#load').load(document.URL +  ' #load');
 			d3.csv("https://raw.githubusercontent.com/yureimacv/yureimacv-DS/master/ocupacion_genero_2.csv")
 					.then(function(data){
 						//console.log("TamJson:"+data.length ); 
