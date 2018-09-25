@@ -7,9 +7,22 @@
 	<h2>Stacked Bar</h2>
 	<select id="ap" onchange="actuali()">
 			<option value="PAIS">PAIS</option>
+			<option value="BARRANQUILLA A.M.">BARRANQUILLA A.M.</option>
 			<option value="BOGOTA">BOGOTA</option>
+			<option value="BUCARAMANGA A.M.">BUCARAMANGA A.M.</option>
+			<option value="CALI A.M.">CALI A.M.</option>
+			<option value="CARTAGENA">CARTAGENA</option>
+			<option value="CUCUTA A.M.">CUCUTA A.M.</option>
+			<option value="IBAGUE">IBAGUE</option>
+			<option value="MANIZALES A.M.">MANIZALES A.M.</option>
+			<option value="MEDELLIN A.M.">MEDELLIN A.M.</option>
+			<option value="MONTERIA">MONTERIA</option>
+			<option value="PASTO">PASTO</option>
+			<option value="PEREIRA A.M.">PEREIRA A.M.</option>
+			<option value="MEDELLIN A.M.">MEDELLIN A.M.</option>
+			<option value="VILLAVICENCIO">VILLAVICENCIO</option>
 		</select>
-		
+
 	<div id="load">
 		<svg height=400 width=1060 id="viz"></svg>
 	</div>
@@ -24,7 +37,6 @@
 					});
 
 		function actuali(){
-			//$("#load").load(location.href+" #load>*","");
 			$('#load').load(document.URL +  ' #load');
 			d3.csv("https://raw.githubusercontent.com/yureimacv/yureimacv-DS/master/ocupacion_genero_2.csv")
 					.then(function(data){
