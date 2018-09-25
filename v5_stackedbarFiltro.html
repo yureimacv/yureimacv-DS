@@ -24,8 +24,25 @@
 		</select>
 
 	<div id="load">
-		<svg height=400 width=1060 id="viz"></svg>
+		<svg height=350 width=1060 id="viz"></svg>
 	</div>
+	<br/>
+
+	<select id="ca" onchange="actualiLin()">
+			<option value="Comerciantes y vendedores">Comerciantes y vendedores</option>
+			<option value="Dir/func Publicos superiores">Dir/func Publicos superiores</option>
+			<option value="No informa">No informa</option>
+			<option value="P. Administrativo.">P. Administrativo.</option>
+			<option value="Profesionales y tecnicos">Profesionales y tecnicos</option>
+			<option value="Trab Agropecuarios y forestales">Trab Agropecuarios y forestales</option>
+			<option value="Trab de los servicios">Trab de los servicios</option>
+			<option value="Trab/operad no agricolas">Trab/operad no agricolas</option>	
+	</select>
+
+	<div id="lineas">
+		<svg height=200 width=1060 id="viz2"></svg>
+	</div>
+
 	<script src="https://d3js.org/d3.v5.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script>
@@ -44,10 +61,19 @@
 						dibuje_stacked(data, d3.select("#viz"));
 					});
 		}
+
+		function actualiLin(ocupacion){
+			console.log(ocupacion);
+			$('#lineas').load(document.URL +  ' #lineas');
+		d3.csv("https://raw.githubusercontent.com/yureimacv/yureimacv-DS/gh-pages/Educacion_genero.csv")
+					.then(function(data){
+						//console.log("TamJson:"+data.length ); 
+						dibuje_lineas(data, d3.select("#viz2"));
+					});
 	    
+			}
 
-
-		function dibuje_stacked(consulta, svg){
+		function dibuje_stacked(consulta, svg) {
 			//consulta
 
 			/*************Consulta************/
@@ -95,6 +121,8 @@
     			.enter().append("g")
       				.attr("fill", function(d) { return z(d.key); })
     			//.merge(g)
+    			// .transition()
+      	// 		.delay((d,i)=> i * 50)
     			.selectAll("rect")
     			.data(function(d) { return d; })
     			.enter().append("rect")
@@ -102,12 +130,15 @@
       				.attr("y", function(d) { return y(d[1]); })
       				.attr("height", function(d) { return y(d[0])-y(d[1]); })
       				.attr("width", x.bandwidth())
-      			.on("mouseover", function() { tooltip.style("display", null); d3.select(this).attr("fill", "#E8A90E")})
+      			.on("mouseover", function() { tooltip.style("display", null); 
+    //  				actualiLin(function(d) { return x(d.data.ocupacion); });
+      				d3.select(this).attr("fill", "#E8A90E")})
       			.on("mouseout", function(d, i) { tooltip.style("display", "none");d3.select(this).attr("fill", function() {return "";});})
       			.on("mousemove", function(d) {
         			//console.log(parseInt(d[1])-parseInt(d[0]));
         			var xPosition = d3.mouse(this)[0]- 10;
         			var yPosition = d3.mouse(this)[1]- 10;
+        		//	actualiLin();
         			tooltip.attr("transform", "translate(" + (xPosition + 5) + "," + yPosition + ")");
         			tooltip.select("text").text(d3.format(",")(+d[1]- +d[0]) + " - "+d3.format(".3n")((+d[1]- +d[0])/+d.data.total*100) + "%");});
 
@@ -181,20 +212,112 @@
     				.attr("dy", "1.2em")
     				.style("text-anchor", "center")
     				.attr("font-size", "16px")
-    				.attr("font-weight", "bold");
+    				.attr("font-weight", "bold");		
+}
 
 
-			// //update
-			// 	g.attr("x", function(d) { return x(d.data.ocupacion); })
-   //    				.attr("y", function(d) { return y(d[1]); })
-   //    				.attr("height", function(d) { return y(d[0])-y(d[1]); })
-   //    				.attr("width", x.bandwidth());
+		function dibuje_lineas(consulta, svg){
+			//Consulta
+			
+			// var consultaSort=consulta;
+			//   console.log(consultaSort);	
 
-   //    			//exit
-   //    			g.exit()
-   //    				.remove();
+			var consultaGroup = d3.nest()
+         						.key(function(d) { return d.ciudad; })
+         						.entries(consulta);
+      		var dataFiltered = consultaGroup.filter(function (d) { return d.key === d3.select("#ap").property("value") });
+  			var dataFiltered2=dataFiltered.map(d=> d.values);
+			
+			var consultaGroupb = d3.nest()
+          						.key(function(d) { return d.ocupacion; })
+          						.entries(dataFiltered2[0]);
+      
+	   		var dataFilteredb = consultaGroupb.filter(function (d) { return d.key === d3.select("#ca").property("value")  })
+			var dataFiltered2b=dataFilteredb.map(d=> d.values);
+			var consultaSort=dataFiltered2b[0];
+			var consulta=consultaSort;
+				
+
+			//Variable
+			var margin = {top: 20, right: 40, bottom: 20, left: 40}, 
+  				height = +svg.attr("height") - margin.top - margin.bottom,
+  				width = +svg.attr("width") - margin.left - margin.right,
+  				g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+  					
+
+			//Escalas
+			 	var x = d3.scaleBand()
+			 			.domain(consultaSort.map(function(d) { return d.sexo; }))
+			 			.rangeRound([0, width]);
       			
-		}
+      			var y = d3.scaleLinear()
+      					.domain([0, d3.max(consultaSort, function(d) { return +d.Hombres; })])
+      					.rangeRound([height, 0]);
+
+
+      			var line = d3.line()
+                    .x(function(d) { return x(d.sexo); })
+                    .y(function(d) { return y(+d.Hombres); })
+
+                 var line2 = d3.line()
+                    .x(function(d) { return x(d.sexo); })
+                    .y(function(d) { return y(+d.Mujeres); })
+
+        		//console.log(line)
+       
+       		//axis
+       			g.append("g")
+      				.attr("class", "axis axis--x")
+      				.attr("transform", "translate(-63," + height + ")")
+      				.call(d3.axisBottom(x))
+      				.select(".domain")
+      					.remove();
+
+  				g.append("g")
+      				.attr("class", "axis axis--y")
+      				.call(d3.axisLeft(y).ticks(null, "s"))
+    				.append("text")
+    					.attr("y", y(y.ticks().pop()) + 0.5)
+      					.attr("text-anchor", "end");
+
+
+				
+				//grafica
+				g.append("path")
+    				.datum(consultaSort)
+    				.attr("class", "line")
+    				.attr("d", line)
+    				.style("fill", "none")
+    				.style("stroke", "steelblue")
+  					.style("stroke-width","3px");
+
+
+  				// g.selectAll(".circle")
+    		// 		.data(consultaSort)
+  				// 	.enter().append("circle")
+    		// 		.attr("class", "circle")
+    		// 		.attr("cx", function(d) { return x(d.sexo); })
+    		// 		.attr("cy", function(d) { return y(d.Hombres); })
+    		// 		.attr("r", 4);
+
+    			g.append("path")
+    				.datum(consultaSort)
+    				.attr("class", "line2")
+    				.attr("d", line2)
+    				.style("fill", "none")
+    				.style("stroke", "red")
+  					.style("stroke-width","3px");
+
+  				// g.selectAll(".circle")
+    		// 		.data(consultaSort)
+  				// 	.enter().append("circle")
+    		// 		.attr("class", "circle2")
+    		// 		.attr("cx", function(d) { return x(d.sexo); })
+    		// 		.attr("cy", function(d) { return y(d.Mujeres); })
+    		// 		.attr("r", 4);
+			}
+
+
 	</script>
 </body>
 </html>
