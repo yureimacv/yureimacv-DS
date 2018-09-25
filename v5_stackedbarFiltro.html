@@ -5,11 +5,12 @@
 </head>
 <body>
 	<h2>Stacked Bar</h2>
-	<select id="ap" onchange="actuali()">
-		<option value="PAIS">PAIS</option>
-		<option value="BOGOTA">BOGOTA</option>
-	</select>
+	
 	<div id="load">
+		<select id="ap" onchange="actuali()">
+			<option value="PAIS">PAIS</option>
+			<option value="BOGOTA">BOGOTA</option>
+		</select>
 		<svg height=400 width=1060 id="viz"></svg>
 	</div>
 	<script src="https://d3js.org/d3.v5.min.js"></script>
@@ -23,7 +24,7 @@
 					});
 
 		function actuali(){
-			$("#load").load(location.href + "#load");
+			$("#load").load(location.href+" #load>*","");
 			d3.csv("https://raw.githubusercontent.com/yureimacv/yureimacv-DS/master/ocupacion_genero_2.csv")
 					.then(function(data){
 						//console.log("TamJson:"+data.length ); 
