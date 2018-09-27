@@ -86,18 +86,14 @@ Consulte qué nivel educativo tienen las personas que ocupan los diferentes carg
 						//console.log("TamJson:"+data.length ); 
 						dibuje_stacked(data, d3.select("#viz"));
 					});
-
 		function actuali(){
 			$('#load').load(document.URL +  ' #load');
-
 			d3.csv("https://raw.githubusercontent.com/yureimacv/yureimacv-DS/master/ocupacion_genero_2.csv")
 					.then(function(data){
 						//console.log("TamJson:"+data.length ); 
 						dibuje_stacked(data, d3.select("#viz"));
-
 					});
 		}
-
 		function actualiLin(){
 			$('#lineas').load(document.URL +  ' #lineas');
 		d3.csv("https://raw.githubusercontent.com/yureimacv/yureimacv-DS/gh-pages/Educacion_genero.csv")
@@ -107,24 +103,18 @@ Consulte qué nivel educativo tienen las personas que ocupan los diferentes carg
 					});
 	    
 			}
-
 		function dibuje_stacked(consulta, svg) {
 			//consulta
-
 			/*************Consulta************/
 			var keys = consulta.columns.slice(2,4);
-
       		var consultaGroup = d3.nest()
          						.key(function(d) { return d.ciudad; })
          						.entries(consulta);
       
-
       		var dataFiltered = consultaGroup.filter(function (d) { return d.key === d3.select("#ap").property("value") })
 			var dataFiltered2=dataFiltered.map(d=> d.values);
-
 			var consultaSort=dataFiltered2[0].sort((a,b)=>d3.descending(+a.total,+b.total));
 			  			
-
 			//Variable
 			var margin = {top: 20, right: 40, bottom: 20, left: 40}, 
   				height = +svg.attr("height") - margin.top - margin.bottom,
@@ -142,12 +132,10 @@ Consulte qué nivel educativo tienen las personas que ocupan los diferentes carg
     		var y=d3.scaleLinear()
     				.domain([0, d3.max(consultaSort, function(d) { return +d.total; })])
 					.rangeRound([height, 0]);
-
 			var z = d3.scaleOrdinal()
 					z.domain(keys)
 					.range(["#0D84FC","#E80C7A" ]);
       
-
           	//Dibuja barras
           	g.append("g")
     			.selectAll("g")
@@ -176,7 +164,6 @@ Consulte qué nivel educativo tienen las personas que ocupan los diferentes carg
         		//	actualiLin();
         			tooltip.attr("transform", "translate(" + (xPosition + 5) + "," + yPosition + ")");
         			tooltip.select("text").text(d3.format(",")(+d[1]- +d[0]) + " - "+d3.format(".3n")((+d[1]- +d[0])/+d.data.total*100) + "%");});
-
       		//Asigna ejes
       		g.append("g")
       			.attr("class", "axis")
@@ -187,7 +174,6 @@ Consulte qué nivel educativo tienen las personas que ocupan los diferentes carg
       			.attr("transform", "rotate(0)")
       			.attr("text-anchor", "middle")
       			.attr("alignment-baseline", "central");
-
       		g.append("g")
       			.attr("class", "axis")
       			.call(d3.axisLeft(y).ticks(null, "s"))
@@ -206,7 +192,6 @@ Consulte qué nivel educativo tienen las personas que ocupan los diferentes carg
       				.attr("y", 5 - margin.left);
 			
 			//Crea leyenda de z
-
   			var legend = g.append("g")
       						.attr("font-family", "sans-serif")
       						.attr("font-size", 10)
@@ -215,19 +200,16 @@ Consulte qué nivel educativo tienen las personas que ocupan los diferentes carg
     					.data(keys.slice().reverse())
     					.enter().append("g")
       						.attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
-
   			legend.append("rect")
       				.attr("x", width - 19)
       				.attr("width", 19)
       				.attr("height", 19)
       				.attr("fill", z);
-
   			legend.append("text")
       				.attr("x", width - 24)
       				.attr("y", 9.5)
       				.attr("dy", "0.32em")
       				.text(function(d) { return d; });
-
   			
   			//Preparación de la forma de los tooltips
   			var tooltip = svg.append("g")
@@ -240,7 +222,6 @@ Consulte qué nivel educativo tienen las personas que ocupan los diferentes carg
     				.attr("height", 22)
     				.attr("fill", "white")
     				.style("opacity", 0.4);
-
   			//Justificación del texto en el rectángulo
   			tooltip.append("text")
     				.attr("x", 2)
@@ -248,17 +229,13 @@ Consulte qué nivel educativo tienen las personas que ocupan los diferentes carg
     				.style("text-anchor", "center")
     				.attr("font-size", "16px")
     				.attr("font-weight", "bold");		
-
     		actualiLin();
 }
-
-
 		function dibuje_lineas(consulta, svg){
 			//Consulta
 			
 			// var consultaSort=consulta;
 			//   console.log(consultaSort);	
-
 			var consultaGroup = d3.nest()
          						.key(function(d) { return d.ciudad; })
          						.entries(consulta);
@@ -274,32 +251,26 @@ Consulte qué nivel educativo tienen las personas que ocupan los diferentes carg
 			var consultaSort=dataFiltered2b[0];
 			var consulta=consultaSort;
 				
-
 			//Variable
 			var margin = {top: 20, right: 40, bottom: 20, left: 40}, 
   				height = +svg.attr("height") - margin.top - margin.bottom,
   				width = +svg.attr("width") - margin.left - margin.right,
   				g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
   					
-
 			//Escalas
 			 	var x = d3.scaleBand()
 			 			.domain(consultaSort.map(function(d) { return d.sexo; }))
 			 			.rangeRound([0, width]);
       			
       			var y = d3.scaleLinear()
-      					.domain([0, d3.max(consultaSort, function(d) { return max(+d.Hombres,+d.Mujeres); })])
+      					.domain([0, d3.max(consultaSort, function(d) { return +d.Hombres; })])
       					.rangeRound([height, 0]);
-
-
       			var line = d3.line()
                     .x(function(d) { return x(d.sexo); })
                     .y(function(d) { return y(+d.Hombres); })
-
                  var line2 = d3.line()
                     .x(function(d) { return x(d.sexo); })
                     .y(function(d) { return y(+d.Mujeres); })
-
         		//console.log(line)
        
        		//axis
@@ -309,15 +280,12 @@ Consulte qué nivel educativo tienen las personas que ocupan los diferentes carg
       				.call(d3.axisBottom(x))
       				.select(".domain")
       					.remove();
-
   				g.append("g")
       				.attr("class", "axis axis--y")
       				.call(d3.axisLeft(y).ticks(null, "s"))
     				.append("text")
     					.attr("y", y(y.ticks().pop()) + 0.5)
       					.attr("text-anchor", "end");
-
-
 				
 				//grafica
 				g.append("path")
@@ -327,8 +295,6 @@ Consulte qué nivel educativo tienen las personas que ocupan los diferentes carg
     				.style("fill", "none")
     				.style("stroke", "steelblue")
   					.style("stroke-width","3px");
-
-
   				// g.selectAll(".circle")
     		// 		.data(consultaSort)
   				// 	.enter().append("circle")
@@ -336,7 +302,6 @@ Consulte qué nivel educativo tienen las personas que ocupan los diferentes carg
     		// 		.attr("cx", function(d) { return x(d.sexo); })
     		// 		.attr("cy", function(d) { return y(d.Hombres); })
     		// 		.attr("r", 4);
-
     			g.append("path")
     				.datum(consultaSort)
     				.attr("class", "line2")
@@ -344,7 +309,6 @@ Consulte qué nivel educativo tienen las personas que ocupan los diferentes carg
     				.style("fill", "none")
     				.style("stroke", "red")
   					.style("stroke-width","3px");
-
   				// g.selectAll(".circle")
     		// 		.data(consultaSort)
   				// 	.enter().append("circle")
@@ -353,8 +317,6 @@ Consulte qué nivel educativo tienen las personas que ocupan los diferentes carg
     		// 		.attr("cy", function(d) { return y(d.Mujeres); })
     		// 		.attr("r", 4);
 			}
-
-
 	</script>
 
 	<!-- Footer -->
