@@ -40,7 +40,9 @@ Consulte qué nivel educativo tienen las personas que ocupan los diferentes carg
 	<div id="load">
 		<svg height=350 width=1060 id="viz"></svg>
 	</div>
-	<br/><br/>
+	<br/>
+	
+  		<br/>
 
 	<select id="ca" onchange="actualiLin()">
 			<option value="Comerciantes y vendedores">Comerciantes y vendedores</option>
@@ -56,6 +58,21 @@ Consulte qué nivel educativo tienen las personas que ocupan los diferentes carg
 	<div id="lineas">
 		<svg height=200 width=1060 id="viz2"></svg>
 	</div>
+	<div class="card">
+    		<div class="card-body">
+      			<h5 class="card-title">Educación</h5>
+      			<p class="card-text">¿Que tan preparadas deben estar las personas, hombres o mujeres, para llegar a ciertos cargos?</p>
+ 
+    		</div>
+  		</div>
+
+  	<div class="card">
+    		<div class="card-body">
+      			<h5 class="card-title">Insights</h5>
+      			<p class="card-text">*** Siendo este un país agropecuario llama la atención que no más de <b>100.000</b> personas se dedican a esta labor ***</p>
+ 
+    		</div>
+  		</div>
 	</center>
 </div>
 <br/><br/><br/>
@@ -271,7 +288,7 @@ Consulte qué nivel educativo tienen las personas que ocupan los diferentes carg
 			 			.rangeRound([0, width]);
       			
       			var y = d3.scaleLinear()
-      					.domain([0, d3.max(consultaSort, function(d) { return +d.Hombres; })])
+      					.domain([0, d3.max(consultaSort, function(d) { return max(+d.Hombres,+d.Mujeres); })])
       					.rangeRound([height, 0]);
 
 
