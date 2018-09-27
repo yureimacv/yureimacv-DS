@@ -56,7 +56,7 @@ Consulte qué nivel educativo tienen las personas que ocupan los diferentes carg
 	</select>
 <br/><br/><br/>
 	<div id="lineas">
-		<svg height=200 width=1060 id="viz2"></svg>
+		<svg height=300 width=1060 id="viz2"></svg>
 	</div>
 	<div class="card">
     		<div class="card-body">
@@ -263,7 +263,7 @@ Consulte qué nivel educativo tienen las personas que ocupan los diferentes carg
 			 			.rangeRound([0, width]);
       			
       			var y = d3.scaleLinear()
-      					.domain([0, d3.max(consultaSort, function(d) { return +d.Hombres; })])
+      					.domain([0, d3.max(consultaSort, function(d) { return Math.max(+d.Mujeres,+d.Hombres); })])
       					.rangeRound([height, 0]);
       			var line = d3.line()
                     .x(function(d) { return x(d.sexo); })
@@ -271,7 +271,7 @@ Consulte qué nivel educativo tienen las personas que ocupan los diferentes carg
                  var line2 = d3.line()
                     .x(function(d) { return x(d.sexo); })
                     .y(function(d) { return y(+d.Mujeres); })
-        		//console.log(line)
+        		//console.log(d3.max(consultaSort, function(d) { return +d.Hombres; },function(d) { return +d.Mujeres; }));
        
        		//axis
        			g.append("g")
