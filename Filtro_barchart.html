@@ -1,0 +1,331 @@
+<html>
+<head>
+	<title> D3 Stacked Bar </title>
+	<meta charset="UTF-8">
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+</head>
+<body>
+	<center><h1 class="display-2">Cómo se distribuyen los cargos por género</h1>
+		<div class="card">
+    		<div class="card-body">
+      			<h5 class="card-title">En Colombia</h5>
+      			<p class="card-text">Estos son datos que publicó el DANE correspondientes al tercer trimestre de 2014, aquí se refleja cómo los hombres predominan en categorías de cargos como Directivos superiores, trabajos no agrícolas y profesionales y técnicos a su vez, las mujeres tienen una fuerte participación en trabajo de los servicios y como personal administrativo. <br/>
+Consulte qué nivel educativo tienen las personas que ocupan los diferentes cargos en este aspecto, es notorio cómo las mujeres necesitan una mayor preparación en categorías administrativas y superiores.</p>
+      			<p class="card-text"><small class="text-muted">Last updated 2 hours ago</small></p>
+    		</div>
+  		</div>
+
+	<select id="ap" onchange="actuali()">
+			<option value="PAIS">PAIS</option>
+			<option value="BARRANQUILLA A.M.">BARRANQUILLA A.M.</option>
+			<option value="BOGOTA">BOGOTA</option>
+			<option value="BUCARAMANGA A.M.">BUCARAMANGA A.M.</option>
+			<option value="CALI A.M.">CALI A.M.</option>
+			<option value="CARTAGENA">CARTAGENA</option>
+			<option value="CUCUTA A.M.">CUCUTA A.M.</option>
+			<option value="IBAGUE">IBAGUE</option>
+			<option value="MANIZALES A.M.">MANIZALES A.M.</option>
+			<option value="MEDELLIN A.M.">MEDELLIN A.M.</option>
+			<option value="MONTERIA">MONTERIA</option>
+			<option value="PASTO">PASTO</option>
+			<option value="PEREIRA A.M.">PEREIRA A.M.</option>
+			<option value="MEDELLIN A.M.">MEDELLIN A.M.</option>
+			<option value="VILLAVICENCIO">VILLAVICENCIO</option>
+		</select>
+<br/>
+	<div id="load">
+		<svg height=350 width=1060 id="viz"></svg>
+	</div>
+	<br/>
+	
+  		<br/>
+
+	<select id="ca" onchange="actualiLin()">
+			<option value="Comerciantes y vendedores">Comerciantes y vendedores</option>
+			<option value="Dir/func Publicos superiores">Dir/func Publicos superiores</option>
+			<option value="No informa">No informa</option>
+			<option value="P. Administrativo.">P. Administrativo.</option>
+			<option value="Profesionales y tecnicos">Profesionales y tecnicos</option>
+			<option value="Trab Agropecuarios y forestales">Trab Agropecuarios y forestales</option>
+			<option value="Trab de los servicios">Trab de los servicios</option>
+			<option value="Trab/operad no agricolas">Trab/operad no agricolas</option>	
+	</select>
+<br/><br/><br/>
+	<div id="lineas">
+		<svg height=200 width=1060 id="viz2"></svg>
+	</div>
+	<div class="card">
+    		<div class="card-body">
+      			<h5 class="card-title">Educación</h5>
+      			<p class="card-text">¿Que tan preparadas deben estar las personas, hombres o mujeres, para llegar a ciertos cargos?</p>
+ 
+    		</div>
+  		</div>
+
+  	<div class="card">
+    		<div class="card-body">
+      			<h5 class="card-title">Insights</h5>
+      			<p class="card-text">*** Siendo este un país agropecuario llama la atención que no más de <b>100.000</b> personas se dedican a esta labor ***</p>
+ 
+    		</div>
+  		</div>
+	</center>
+</div>
+<br/><br/><br/>
+
+	<script src="https://d3js.org/d3.v5.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script>
+		/**************Trae los datos*****************/
+		d3.csv("https://raw.githubusercontent.com/yureimacv/yureimacv-DS/master/ocupacion_genero_2.csv")
+					.then(function(data){
+						//console.log("TamJson:"+data.length ); 
+						dibuje_stacked(data, d3.select("#viz"));
+					});
+		function actuali(){
+			$('#load').load(document.URL +  ' #load');
+			d3.csv("https://raw.githubusercontent.com/yureimacv/yureimacv-DS/master/ocupacion_genero_2.csv")
+					.then(function(data){
+						//console.log("TamJson:"+data.length ); 
+						dibuje_stacked(data, d3.select("#viz"));
+					});
+		}
+		function actualiLin(f){
+			$('#lineas').load(document.URL +  ' #lineas');
+		d3.csv("https://raw.githubusercontent.com/yureimacv/yureimacv-DS/gh-pages/Educacion_genero.csv")
+					.then(function(data){
+						console.log(f); 
+						dibuje_lineas(data, d3.select("#viz2"),f);
+					});
+	    
+			}
+		function dibuje_stacked(consulta, svg) {
+			//consulta
+			/*************Consulta************/
+			var keys = consulta.columns.slice(2,4);
+      		var consultaGroup = d3.nest()
+         						.key(function(d) { return d.ciudad; })
+         						.entries(consulta);
+      
+      		var dataFiltered = consultaGroup.filter(function (d) { return d.key === d3.select("#ap").property("value") })
+			var dataFiltered2=dataFiltered.map(d=> d.values);
+			var consultaSort=dataFiltered2[0].sort((a,b)=>d3.descending(+a.total,+b.total));
+			  			
+			//Variable
+			var margin = {top: 20, right: 40, bottom: 20, left: 40}, 
+  				height = +svg.attr("height") - margin.top - margin.bottom,
+  				width = +svg.attr("width") - margin.left - margin.right,
+  				g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+  					
+  			
+  			//Escalas
+  			var x = d3.scaleBand()		//Trae todos los label de la columna ocupacion
+  					.domain(consultaSort.map(function(d) { return d.ocupacion; }))
+  					.rangeRound([0, width])
+  					.paddingInner(0.05)
+    				.align(0.1);
+          	
+    		var y=d3.scaleLinear()
+    				.domain([0, d3.max(consultaSort, function(d) { return +d.total; })])
+					.rangeRound([height, 0]);
+			var z = d3.scaleOrdinal()
+					z.domain(keys)
+					.range(["#0D84FC","#E80C7A" ]);
+      
+          	//Dibuja barras
+          	g.append("g")
+    			.selectAll("g")
+    			.data(d3.stack().keys(keys)
+      				.offset(d3.stackOffsetDiverging)(consultaSort))
+    			.enter().append("g")
+      				.attr("fill", function(d) { return z(d.key); })
+    			.selectAll("rect")
+    			.data(function(d) { return d; })
+    			.enter().append("rect")
+      				.attr("x", function(d) { return x(d.data.ocupacion); })
+      				.attr("y", function(d) { return y(d[1]); })
+      				.attr("height", function(d) { return y(d[0])-y(d[1]); })
+      				.attr("width", x.bandwidth())
+      			.on("mouseover", function() { tooltip.style("display", null); 
+    //  				actualiLin(function(d) { return x(d.data.ocupacion); });
+      				d3.select(this).attr("fill", "#E8A90E")})
+      			.on("mouseout", function(d, i) { tooltip.style("display", "none");d3.select(this).attr("fill", function() {return "";});})
+      			.on("click", function(d){actualiLin(d.data.ocupacion);})
+      			.on("mousemove", function(d) {
+        			//console.log(parseInt(d[1])-parseInt(d[0]));
+        			var xPosition = d3.mouse(this)[0]- 10;
+        			var yPosition = d3.mouse(this)[1]- 10;
+        		//	actualiLin();
+        			tooltip.attr("transform", "translate(" + (xPosition + 5) + "," + yPosition + ")");
+        			tooltip.select("text").text(d3.format(",")(+d[1]- +d[0]) + " - "+d3.format(".3n")((+d[1]- +d[0])/+d.data.total*100) + "%");});
+      		//Asigna ejes
+      		g.append("g")
+      			.attr("class", "axis")
+      			.attr("transform", "translate(0," + height + ")")
+      			.call(d3.axisBottom(x))
+      			.selectAll("text")
+      			.attr("font-weight", "bold")
+      			.attr("transform", "rotate(0)")
+      			.attr("text-anchor", "middle")
+      			.attr("alignment-baseline", "central");
+      		g.append("g")
+      			.attr("class", "axis")
+      			.call(d3.axisLeft(y).ticks(null, "s"))
+    			.append("text")
+      				.attr("x", 2)
+      				.attr("y", y(y.ticks().pop()) + 0.5)
+      				.attr("dy", "0.32em")
+      				.attr("fill", "#000")
+      				.attr("font-weight", "bold")
+      				.attr("text-anchor", "start")
+      				.text("Numero de trabajadores")
+      				.attr("font-size", 12)
+      				.attr("text-anchor", "middle")
+      				.attr("transform", "rotate(-90)")
+      				.attr("x", 0 - (height/2))
+      				.attr("y", 5 - margin.left);
+			
+			//Crea leyenda de z
+  			var legend = g.append("g")
+      						.attr("font-family", "sans-serif")
+      						.attr("font-size", 10)
+      						.attr("text-anchor", "end")
+    					.selectAll("g")
+    					.data(keys.slice().reverse())
+    					.enter().append("g")
+      						.attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+  			legend.append("rect")
+      				.attr("x", width - 19)
+      				.attr("width", 19)
+      				.attr("height", 19)
+      				.attr("fill", z);
+  			legend.append("text")
+      				.attr("x", width - 24)
+      				.attr("y", 9.5)
+      				.attr("dy", "0.32em")
+      				.text(function(d) { return d; });
+  			
+  			//Preparación de la forma de los tooltips
+  			var tooltip = svg.append("g")
+    						.attr("class", "tooltip2")
+    						.style("display", "none");
+      
+  			//Creación del rectángulo del tooltip
+  			tooltip.append("rect")
+    				.attr("width", 140)
+    				.attr("height", 22)
+    				.attr("fill", "white")
+    				.style("opacity", 0.4);
+  			//Justificación del texto en el rectángulo
+  			tooltip.append("text")
+    				.attr("x", 2)
+    				.attr("dy", "1.2em")
+    				.style("text-anchor", "center")
+    				.attr("font-size", "16px")
+    				.attr("font-weight", "bold");		
+    		actualiLin("Dir/func Publicos superiores");
+}
+		function dibuje_lineas(consulta, svg,f){
+			//Consulta
+			
+			// var consultaSort=consulta;
+			//   console.log(consultaSort);	
+			var consultaGroup = d3.nest()
+         						.key(function(d) { return d.ciudad; })
+         						.entries(consulta);
+      		var dataFiltered = consultaGroup.filter(function (d) { return d.key === d3.select("#ap").property("value") });
+  			var dataFiltered2=dataFiltered.map(d=> d.values);
+			
+			var consultaGroupb = d3.nest()
+          						.key(function(d) { return d.ocupacion; })
+          						.entries(dataFiltered2[0]);
+      
+	   		var dataFilteredb = consultaGroupb.filter(function (d) { return d.key === f  })
+			var dataFiltered2b=dataFilteredb.map(d=> d.values);
+			var consultaSort=dataFiltered2b[0];
+			var consulta=consultaSort;
+				
+			//Variable
+			var margin = {top: 20, right: 40, bottom: 20, left: 40}, 
+  				height = +svg.attr("height") - margin.top - margin.bottom,
+  				width = +svg.attr("width") - margin.left - margin.right,
+  				g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+  					
+			//Escalas
+			 	var x = d3.scaleBand()
+			 			.domain(consultaSort.map(function(d) { return d.sexo; }))
+			 			.rangeRound([0, width]);
+      			
+      			var y = d3.scaleLinear()
+      					.domain([0, d3.max(consultaSort, function(d) { return Math.max(+d.Mujeres,+d.Hombres); })])
+      					.rangeRound([height, 0]);
+      			var line = d3.line()
+                    .x(function(d) { return x(d.sexo); })
+                    .y(function(d) { return y(+d.Hombres); })
+                 var line2 = d3.line()
+                    .x(function(d) { return x(d.sexo); })
+                    .y(function(d) { return y(+d.Mujeres); })
+        		//console.log(d3.max(consultaSort, function(d) { return +d.Hombres; },function(d) { return +d.Mujeres; }));
+       
+       		//axis
+       			g.append("g")
+      				.attr("class", "axis axis--x")
+      				.attr("transform", "translate(-63," + height + ")")
+      				.call(d3.axisBottom(x))
+      				.select(".domain")
+      					.remove();
+  				g.append("g")
+      				.attr("class", "axis axis--y")
+      				.call(d3.axisLeft(y).ticks(null, "s"))
+    				.append("text")
+    					.attr("y", y(y.ticks().pop()) + 0.5)
+      					.attr("text-anchor", "end");
+				
+				//grafica
+				g.append("path")
+    				.datum(consultaSort)
+    				.attr("class", "line")
+    				.attr("d", line)
+    				.style("fill", "none")
+    				.style("stroke", "steelblue")
+  					.style("stroke-width","3px");
+  				// g.selectAll(".circle")
+    		// 		.data(consultaSort)
+  				// 	.enter().append("circle")
+    		// 		.attr("class", "circle")
+    		// 		.attr("cx", function(d) { return x(d.sexo); })
+    		// 		.attr("cy", function(d) { return y(d.Hombres); })
+    		// 		.attr("r", 4);
+    			g.append("path")
+    				.datum(consultaSort)
+    				.attr("class", "line2")
+    				.attr("d", line2)
+    				.style("fill", "none")
+    				.style("stroke", "red")
+  					.style("stroke-width","3px");
+  				// g.selectAll(".circle")
+    		// 		.data(consultaSort)
+  				// 	.enter().append("circle")
+    		// 		.attr("class", "circle2")
+    		// 		.attr("cx", function(d) { return x(d.sexo); })
+    		// 		.attr("cy", function(d) { return y(d.Mujeres); })
+    		// 		.attr("r", 4);
+			}
+	</script>
+
+	<!-- Footer -->
+<footer class="page-footer font-small blue">
+
+  <div class="footer-copyright text-center py-3">© 2018 Creado por Maria Castro (Yureimacv):
+    <a href="https://tldrlegal.com/license/mit-license" target="_blank">  Under the MIT license </a>
+  </div>
+
+</footer>
+<!-- Footer -->
+
+</body>
+</html>
